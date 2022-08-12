@@ -2,7 +2,10 @@
 
 ## About music
 
-A simple Python module dealing with Musical Notes and 7-note Scales. This project defines functions for the following tasks:
+music is simple Python module dealing with Musical Notes and 7-note Scales. \
+*Date of creation:* `November 1, 2019`
+
+This project defines functions for the following tasks:
 - Create a random musical scale
 - Returning the gap (number of half-steps) between two notes
 - Transposing a musical scale
