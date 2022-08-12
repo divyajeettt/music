@@ -26,3 +26,5 @@ import music
 
 - Can implement equality for two scales more rigorously
 - Can implement functions to get the natural major and minor scales, given the root
+- Extension of functionality
+- May upload the project on PyPI
