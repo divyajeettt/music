@@ -3,7 +3,7 @@
 ## About music
 
 music is simple Python module dealing with Musical Notes and 7-note Scales. \
-*Date of creation:* `November 1, 2020`
+*Date of creation:* `September 27, 2020`
 
 This project defines functions for the following tasks:
 - Create a random musical scale
