@@ -1,15 +1,16 @@
 from random import sample
 
-notes = [
+
+NOTES = [
 	"A" , "A#", "Bb", "B" , "C" , "C#", "Db", "D" ,"D#",
     "Eb", "E" , "F" , "F#", "Gb", "G" , "G#", "Ab",
 ]
 
-improper = ["B#", "Cb", "E#", "Fb"]
+IMPROPER = ["B#", "Cb", "E#", "Fb"]
 
-all_notes = notes + improper
+ALL_NOTES = NOTES + IMPROPER
 
-doubles = [
+DOUBLES = [
 	"A×"  , "B×"  , "C×"  , "D×"  , "E×"  , "F×"  , "G×"  ,
 	"A#×" , "B#×" , "C#×" , "D#×" , "E#×" , "F#×" , "G#×" ,
 	"Ab×" , "Bb×" , "Cb×" , "Db×" , "Eb×" , "Fb×" , "Gb×" ,
@@ -18,7 +19,7 @@ doubles = [
 	"A#db", "B#db", "C#db", "D#db", "E#db", "F#db", "G#db",
 ]
 
-naturals = {
+NATURALS = {
 	**dict.fromkeys(["A" , "G×" , "Bdb", "Cbdb"]        , "A"),
 	**dict.fromkeys(["B" , "A×" , "Cb" , "Dbdb", "C#db"], "B"),
 	**dict.fromkeys(["C" , "Bb×", "Ddb", "A#×" , "B#"  ], "C"),
@@ -28,7 +29,7 @@ naturals = {
 	**dict.fromkeys(["G" , "F×" , "Adb", "E#×" ]        , "G"),
 }
 
-sharps = {
+SHARPS = {
 	**dict.fromkeys(["G#", "Ab", "Gb×", "A#db", "F#×", "Bbdb"], "G#"),
 	**dict.fromkeys(["A#", "Bb", "Ab×", "B#db", "G#×", "Cdb" ], "A#"),
 	**dict.fromkeys(["C#", "Db", "Cb×", "D#db", "B×" , "Ebdb"], "C#"),
@@ -36,7 +37,7 @@ sharps = {
 	**dict.fromkeys(["F#", "Gb", "Fb×", "G#db", "E×" , "Abdb"], "F#"),
 }
 
-flats = {
+FLATS = {
 	**dict.fromkeys(["Ab", "G#", "A#db", "Gb×", "F#×", "Bbdb"], "Ab"),
 	**dict.fromkeys(["Bb", "A#", "B#db", "Ab×", "G#×", "Cdb" ], "Bb"),
 	**dict.fromkeys(["Db", "C#", "D#db", "Cb×", "B×" , "Ebdb"], "Db"),
@@ -44,7 +45,7 @@ flats = {
 	**dict.fromkeys(["Gb", "F#", "G#db", "Fb×", "E×" , "Abdb"], "Gb"),
 }
 
-equivalents = {
+EQUIVALENTS = {
 	"A" : {"G": "G×", "B": "Bdb", "C": "Cbdb"},
 	"B" : {"A": "A×", "C": "Cb" , "D": "Dbdb"},
 	"C" : {"B": "B#", "D": "Ddb", "A": "A#×" },
@@ -71,9 +72,9 @@ equivalents = {
 }
 
 
-def gap(note1, note2):
-    """returns the gap between the given notes as int,
-    assuming note2 occurs after note1"""
+def gap(note1: str, note2: str) -> int:
+    """returns the gap between the given notes as int
+    assumption: note2 occurs after note1"""
 
     notes = [note1, note2]
 
@@ -87,41 +88,39 @@ def gap(note1, note2):
     return (gap + 12) if gap < 0 else gap
 
 
-def sharp(note):
+def sharp(note: str) -> str:
     """returns the next note in musical sequence"""
 
-    if note in doubles:
-        change = naturals if note in naturals else sharps
+    if note in DOUBLES:
+        change = NATURALS if note in NATURALS else SHARPS
         note   = change[note]
 
     note += "#"
     note  = note.replace("b#", "")
-
     if note.count("#") == 2:
         note = note.replace("#", "") + "×"
 
-    change = naturals if note in naturals else sharps
+    change = NATURALS if note in NATURALS else SHARPS
     return change[note]
 
 
-def flat(note):
+def flat(note: str) -> str:
     """returns the previous note in musical sequence"""
 
-    if note in doubles:
-        change = naturals if note in naturals else flats
+    if note in DOUBLES:
+        change = NATURALS if note in NATURALS else FLATS
         note   = change[note]
 
     note += "b"
     note  = note.replace("#b", "")
-
     if note.count("b") == 2:
         note = note.replace("b", "") + "db"
 
-    change = naturals if note in naturals else flats
+    change = NATURALS if note in NATURALS else FLATS
     return change[note]
 
 
-def is_scale(scale):
+def is_scale(scale: list[str]) -> bool:
     """returns True if the given scale is valid, else False"""
 
     natural = {"A", "B", "C", "D", "E", "F", "G"}
@@ -130,22 +129,22 @@ def is_scale(scale):
         if note not in str(scale):
             return False
 
-    for note in all_notes:
+    for note in ALL_NOTES:
         if note in scale:
-            for eq in equivalents[note]:
-                if equivalents[note][eq] in scale:
+            for eq in EQUIVALENTS[note]:
+                if EQUIVALENTS[note][eq] in scale:
                     return False
 
     return True
 
 
-def is_mode(scale1, scale2):
+def is_mode(scale1: list[str], scale2: list[str]) -> bool:
     """returns True if the given scales are modes of each other, else False"""
 
     return set(scale1) == set(scale2)
 
 
-def mode(scale, n):
+def mode(scale: list[str], n: int) -> list[str]:
     """returns the 'n'th mode of a 7-note scale"""
 
     if not isinstance(n, int):
@@ -157,11 +156,9 @@ def mode(scale, n):
     return scale[n-1:] + scale[:n-1]
 
 
-def transpose(scale, steps=0, key=None):
-    """transposes a scale given number of halfsteps up or down
-    if key is given, argument 'steps' will be ignored, transposes the scale to
-    the given key
-    returns the transposed scale as a list"""
+def transpose(scale: list[str], steps: int|None=0, key: str|None=None) -> list[str]:
+    """transposes a scale given number of half-steps up or down
+    if key is given, steps will be ignored, transposes the scale to the given key"""
 
     if isinstance(scale, tuple):
         scale = list(scale)
@@ -188,7 +185,7 @@ def transpose(scale, steps=0, key=None):
 
             for i in range(7):
                 if mode_scale[i] not in scale[i]:
-                    scale[i] = equivalents[scale[i]][mode_scale[i]]
+                    scale[i] = EQUIVALENTS[scale[i]][mode_scale[i]]
 
         return scale
 
@@ -199,31 +196,31 @@ def transpose(scale, steps=0, key=None):
     return transpose(scale, steps-1 if steps > 0 else steps+1)
 
 
-def triad_chords(scale):
-    """returns the basic 3 - note triads allowed in a scale"""
+def triad_chords(scale: list[str]) -> list[str]:
+    """returns the basic 3-note triads allowed in a scale"""
 
     scale *= 2
     return [scale[i] + scale[i+2] + scale[i+4] for i in range(7)]
 
 
-def seventh_chords(scale):
-    """returns the 4 - note seventh chords allowed in a scale"""
+def seventh_chords(scale: list[str]) -> list[str]:
+    """returns the 4-note seventh chords allowed in a scale"""
 
     triads = triad_chords(scale) * 2
     return [scale[i] + triads[i+2] for i in range(7)]
 
 
-def random_scale(root):
-    """returns a random scale rooted on the given note as a tuple"""
+def random_scale(root: str) -> list[str]:
+    """returns a random scale rooted on the given note"""
 
-    if root not in all_notes:
+    if root not in ALL_NOTES:
         raise ValueError("given 'root' is not a musical note")
 
     natural = ["A", "B", "C", "D", "E", "F", "G"]
     mode = {natural[i]: i for i in range(7)}[root[:1]]
 
     while True:
-        scale = sorted(sample(all_notes, 7), key=(lambda x: x[0]))
+        scale = sorted(sample(ALL_NOTES, 7), key=(lambda x: x[0]))
 
         if not is_scale(scale):
             continue
@@ -237,4 +234,4 @@ def random_scale(root):
         if root not in scale:
             continue
 
-        return tuple(scale[mode:] + scale[:mode])
+        return scale[mode:] + scale[:mode]
