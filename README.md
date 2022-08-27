@@ -2,7 +2,8 @@
 
 ## About music
 
-music is simple Python module dealing with Musical Notes and 7-note Scales. \
+music is simple Python module dealing with Musical Notes and 7-note Scales.
+
 *Date of creation:* `November 01, 2019`
 
 This project defines functions for the following tasks:
@@ -29,5 +30,5 @@ import music
 
 - Can implement equality for two scales more rigorously
 - Can implement functions to get the natural major and minor scales, given the root
-- Extension of functionality
+- Implementation using OOPs
 - May upload the project on [PyPI](https://pypi.org/)
