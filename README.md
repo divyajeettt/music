@@ -19,7 +19,7 @@ To better understand how to use each function, in your project, run:
 help(function_name)
 ```
 
-# Run
+## Run
 To use, clone the repository on your device, navigate to the folder, and move this file to your project folder. Import this file in your project, wherever needed, using:
 
 ```python
